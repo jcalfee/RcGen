@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
-require 'lib/rcgen.rb'
+$: << File.dirname(__FILE__) + "/lib"
+
+require "rcgen"
 include RcGen
 
 ARGV.each do|a|

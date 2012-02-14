@@ -4,7 +4,7 @@
 module RcGen
 
   csv_file='data/data_def.csv'
-  require 'lib/faster_csv.rb'
+  require 'faster_csv'
   
   @@data_def = Array.new
   FasterCSV.foreach(csv_file, :headers => true) do |csv_obj|
