@@ -65,9 +65,13 @@ module RcGen
       if condition.nil? && value.nil?
         # short-hand: my_column.rx
         column, value = column.split('.')
-        condition='=='
+        if value.nil?
+          condition='!='
+        else
+          condition='=='
+        end
       end
-      if value == "''" || value == '""'
+      if value == "''" || value == '""' || value.nil? || value.empty?
          value = "nil"
       else 
          value = "'#{value}'"

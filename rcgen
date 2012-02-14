@@ -7,7 +7,7 @@ ARGV.each do|a|
   if a.match ".erb"
     require 'erb'
     template = ERB.new IO.read a
-    puts template.result, binding
+    puts template.result
   else
     eval IO.read a
   end
