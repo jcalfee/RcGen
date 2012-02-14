@@ -3,7 +3,7 @@
 # Data Definition Module
 module RcGen
 
-  csv_file='data/data_def.csv'
+  csv_file='data_def.csv'
   require 'faster_csv'
   
   @@data_def = Array.new
