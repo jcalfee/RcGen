@@ -1,4 +1,4 @@
-#/usr/bin/env ruby
+#!/usr/bin/env ruby
 
 # Data Definition Module
 module RcGen
@@ -6,20 +6,15 @@ module RcGen
   csv_file='data/data_def.csv'
   require 'lib/faster_csv.rb'
   
-  module_function
-  def data_def; @data_def end
-  def data_def= v; @data_def = v end
-  #attr_accessor :data_def
-  
-  @data_def = Array.new
+  @@data_def = Array.new
   FasterCSV.foreach(csv_file, :headers => true) do |csv_obj|
     csv_obj['column'] = csv_obj['column'] unless csv_obj['column'].nil?
     csv_obj['type'] = csv_obj['type'] unless csv_obj['type'].nil?
-    @data_def.push csv_obj
+    @@data_def.push csv_obj
   end
   
   # Filter out anything that is not fully defined
-  @data_def = @data_def.find_all { |row| 
+  @@data_def = @@data_def.find_all { |row| 
     ! row['type'].nil? && 
     ! row['column'].nil? 
   }
@@ -84,8 +79,8 @@ module RcGen
   end
   
   def rows(condition="")
-    f=DD.formula condition
-    DD.data_def.find_all {|row| eval(f) }
+    f=formula condition
+    @@data_def.find_all {|row| eval(f) }
   end
   
   def columns(column="column", condition="")
@@ -104,7 +99,7 @@ module RcGen
   # Comma Select
   
   def col(condition="", delimiter=", ")
-    a=rows(condition).collect {|row| DD.format_row(:col, row) }
+    a=rows(condition).collect {|row| format_row(:col, row) }
     if delimiter.nil?
       a
     else
@@ -113,7 +108,7 @@ module RcGen
   end
   
   def colType(condition="", delimiter=", ")
-    a=rows(condition).collect {|row| DD.format_row(:col_type, row) }
+    a=rows(condition).collect {|row| format_row(:col_type, row) }
     if delimiter.nil?
       a
     else
@@ -122,7 +117,7 @@ module RcGen
   end
   
   def colDef(condition="", delimiter=",\n")
-    a=rows(condition).collect {|row| DD.format_row(:col_def, row) }
+    a=rows(condition).collect {|row| format_row(:col_def, row) }
     if delimiter.nil?
       a
     else

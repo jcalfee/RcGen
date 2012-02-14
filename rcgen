@@ -1,2 +1,14 @@
-#!/bin/bash
-cat ${1?erb file}|ruby ./firebird/erb.rb
+#!/usr/bin/env ruby
+
+require 'lib/rcgen.rb'
+include RcGen
+
+ARGV.each do|a|
+  if a.match ".erb"
+    require 'erb'
+    template = ERB.new IO.read a
+    puts template.result, binding
+  else
+    eval IO.read a
+  end
+end
