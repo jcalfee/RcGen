@@ -18,7 +18,7 @@ def process template_file, input_csv
     if is_erb
       puts template.result
     else
-      puts eval template
+      eval template
     end
 end
 
