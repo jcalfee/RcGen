@@ -3,21 +3,22 @@
 # Data Definition Module
 module RcGen
 
-  csv_file='data_def.csv'
-  require 'faster_csv'
-  
+  require File.dirname(__FILE__) + '/faster_csv'
   @@data_def = Array.new
-  FasterCSV.foreach(csv_file, :headers => true) do |csv_obj|
-    csv_obj['column'] = csv_obj['column'] unless csv_obj['column'].nil?
-    csv_obj['type'] = csv_obj['type'] unless csv_obj['type'].nil?
-    @@data_def.push csv_obj
-  end
   
-  # Filter out anything that is not fully defined
-  @@data_def = @@data_def.find_all { |row| 
-    ! row['type'].nil? && 
-    ! row['column'].nil? 
-  }
+  def csv_file= csv_file_name
+    FasterCSV.foreach(csv_file_name, :headers => true) do |csv_obj|
+      csv_obj['column'] = csv_obj['column'] unless csv_obj['column'].nil?
+      csv_obj['type'] = csv_obj['type'] unless csv_obj['type'].nil?
+      @@data_def.push csv_obj
+    end
+  
+    # Filter out anything that is not fully defined
+    @@data_def = @@data_def.find_all { |row| 
+      ! row['type'].nil? && 
+      ! row['column'].nil? 
+    }
+  end
   
   # Return something like VARCHAR(15), or NUMERIC(11,2)
   def db_type(row)

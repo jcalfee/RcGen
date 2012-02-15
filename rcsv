@@ -1,26 +1,10 @@
 #!/usr/bin/env ruby
+
 $: << File.dirname(__FILE__) + "/lib"
 
-template=IO.read ARGV[0]
+require "rcsv"
+include RCsv
+template_file=ARGV[0]
 input_csv=ARGV[1]
 
-require 'faster_csv'
-
-def escape value
-  value.sub "'", "''"
-end
-
-def value column
-  v=$row[column]
-  escape v unless v.nil?
-end
-
-def values array
-  array.collect do|a| 
-    value a
-  end
-end
-
-FasterCSV.foreach(input_csv, :headers => true) do |$row|
-  puts eval '"""' + template + '"""'
-end
+RCsv.process template_file,input_csv
